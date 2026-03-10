@@ -1,6 +1,6 @@
 # Skill conventions
 
-Skills are agent-executable instruction files stored in `.claude/skills/`.
+Skills are agent-executable instruction files stored in `.agents/skills/`.
 Each skill defines a repeatable task that any capable coding agent can follow.
 The format follows the [Agent Skills specification](https://agentskills.io/specification).
 
@@ -9,7 +9,7 @@ The format follows the [Agent Skills specification](https://agentskills.io/speci
 A skill is a directory containing at minimum a `SKILL.md` file:
 
 ```
-.claude/skills/<skill-name>/
+.agents/skills/<skill-name>/
 ├── SKILL.md          # Required
 ├── scripts/          # Optional — executable scripts the agent can run
 ├── references/       # Optional — additional documentation loaded on demand
