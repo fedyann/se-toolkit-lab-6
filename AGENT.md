@@ -1,12 +1,25 @@
 # Agent Documentation
 
 ## Overview
-A CLI agent that takes a question as input, sends it to an LLM, and returns a structured JSON answer.
+A CLI agent that takes a question, uses tools to read the project wiki, and returns a structured JSON answer.
 
 ## LLM Provider
 - Provider: Qwen Code API (deployed on VM)
 - Model: qwen3-coder-plus
 - API: OpenAI-compatible chat completions
+
+## Tools
+- `list_files(path)` — lists files in a directory (blocks `../` traversal)
+- `read_file(path)` — reads file contents (blocks `../` traversal)
+
+## Agentic loop
+1. Send question + tool definitions to LLM
+2. If LLM returns tool_calls → execute each tool, append result, repeat
+3. If LLM returns text → output final JSON and exit
+4. Stop after 10 tool calls max
+
+## System prompt strategy
+The agent is instructed to always use `list_files` to discover wiki files, then `read_file` to find the answer, and include source as `wiki/filename.md#section`.
 
 ## How to run
 
@@ -24,10 +37,10 @@ A CLI agent that takes a question as input, sends it to an LLM, and returns a st
 
 ## Output format
 ```json
-{"answer": "...", "tool_calls": []}
+{"answer": "...", "source": "wiki/file.md#section", "tool_calls": [...]}
 ```
 
 ## Run tests
 ```bash
-uv run pytest tests/test_agent.py -v
+uv run pytest tests/ -v
 ```

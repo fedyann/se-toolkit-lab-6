@@ -81,11 +81,14 @@ def main():
         {
             "role": "system",
             "content": (
-                "You are a documentation assistant. "
-                "Use list_files to discover files in the wiki directory, "
-                "then use read_file to find the answer. "
-                "Always include a source reference as 'file_path#section' in your final answer. "
-                "Answer concisely."
+                "You are a documentation assistant for a software engineering course. "
+                "The project has a wiki directory with markdown files. "
+                "ALWAYS follow these steps: "
+                "1. Use list_files with path='wiki' to see available files. "
+                "2. Use read_file to read the most relevant file(s). "
+                "3. Only after reading file contents, give your final answer. "
+                "NEVER answer without first calling read_file to read the relevant file. "
+                "Always include source as 'wiki/filename.md#section-anchor' in your answer text."
             )
         },
         {"role": "user", "content": question}
@@ -125,9 +128,7 @@ def main():
                 })
         else:
             answer = msg.content.strip()
-            # Extract source from answer if LLM included it
-            lines = answer.split("\n")
-            for line in lines:
+            for line in answer.split("\n"):
                 if "wiki/" in line and "#" in line:
                     for word in line.split():
                         if "wiki/" in word and "#" in word:
